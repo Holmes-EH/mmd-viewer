@@ -43,7 +43,7 @@ export class MmdView extends FileView {
 		}
 	}
 
-	async onClose() {
+	onClose(): Promise<void> {
 		const container = this.contentEl;
 
 		let svgElement = container.getElementsByTagName("svg").item(0);
@@ -51,5 +51,6 @@ export class MmdView extends FileView {
 			const panZoomTiger = svgPanZoom(svgElement);
 			panZoomTiger.destroy();
 		}
+		return Promise.resolve();
 	}
 }
