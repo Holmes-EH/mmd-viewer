@@ -40,13 +40,19 @@ export class MmdView extends FileView {
 		let svgElement = content.getElementsByTagName("svg").item(0);
 		if (svgElement !== null) {
 			svgElement.style = "height:100%";
-			let panZoomTiger = svgPanZoom(svgElement);
+			const panZoomTiger = svgPanZoom(svgElement);
 			panZoomTiger.setZoomScaleSensitivity(0.4);
 			panZoomTiger.fit();
 		}
 	}
 
 	async onClose() {
-		// Nothing to clean up.
+		const container = this.contentEl;
+
+		let svgElement = container.getElementsByTagName("svg").item(0);
+		if (svgElement !== null) {
+			const panZoomTiger = svgPanZoom(svgElement);
+			panZoomTiger.destroy();
+		}
 	}
 }
