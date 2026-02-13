@@ -2,7 +2,7 @@ import { Plugin } from "obsidian";
 import { MMD_VIEWER, MmdView } from "viewer";
 
 export default class MmdViewer extends Plugin {
-	async onload() {
+	onload() {
 		this.registerExtensions(["mmd"], "mmd-viewer");
 		this.registerView(MMD_VIEWER, (leaf) => new MmdView(leaf));
 	}
