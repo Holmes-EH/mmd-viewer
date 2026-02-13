@@ -1,7 +1,15 @@
-import { FileView, TFile, WorkspaceLeaf, loadMermaid } from "obsidian";
+import mermaid, { MermaidConfig } from "mermaid";
+import { FileView, TFile, WorkspaceLeaf } from "obsidian";
 import svgPanZoom from "svg-pan-zoom";
 
 export const MMD_VIEWER = "mmd-viewer";
+
+function isDarkMode() {
+	return (
+		window.matchMedia &&
+		window.matchMedia("(prefers-color-scheme: dark)").matches
+	);
+}
 
 export class MmdView extends FileView {
 	fileName: string | null;
@@ -22,18 +30,24 @@ export class MmdView extends FileView {
 		let fileContent = await file.vault.read(file);
 		const container = this.contentEl;
 		container.empty();
-		const mermaid = await loadMermaid();
-		mermaid.initialize({ theme: "dark" });
+		let mermaidConfiguration: MermaidConfig = isDarkMode()
+			? { theme: "dark" }
+			: {};
+		mermaid.initialize(mermaidConfiguration);
 
-		let content = container.createDiv("graphDiv");
-		const { svg } = await mermaid.render("graphDiv", fileContent);
+		let content = container.createDiv("graph");
+		const { svg } = await mermaid.render("graph", fileContent);
+
+		// MermaidJS documentation recommends adding rendered svg to the DOM this way.
+		// So disabling the rule.
+		// eslint-disable-next-line @microsoft/sdl/no-inner-html
 		content.innerHTML = svg;
-		content.style = "height:100%";
 
 		let svgElement = content.getElementsByTagName("svg").item(0);
 		if (svgElement !== null) {
 			svgElement.style = "height:100%";
 			let panZoomTiger = svgPanZoom(svgElement);
+			panZoomTiger.setZoomScaleSensitivity(0.4);
 			panZoomTiger.fit();
 		}
 	}

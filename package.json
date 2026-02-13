@@ -24,6 +24,7 @@
 		"typescript-eslint": "8.35.1"
 	},
 	"dependencies": {
+		"mermaid": "^11.12.2",
 		"obsidian": "latest",
 		"svg-pan-zoom": "^3.6.2"
 	}
