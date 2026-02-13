@@ -4,13 +4,6 @@ import svgPanZoom from "svg-pan-zoom";
 
 export const MMD_VIEWER = "mmd-viewer";
 
-function isDarkMode() {
-	return (
-		window.matchMedia &&
-		window.matchMedia("(prefers-color-scheme: dark)").matches
-	);
-}
-
 export class MmdView extends FileView {
 	fileName: string | null;
 	constructor(leaf: WorkspaceLeaf) {
@@ -26,11 +19,12 @@ export class MmdView extends FileView {
 	}
 
 	async onLoadFile(file: TFile) {
+		const { app } = this;
 		this.fileName = file.name;
 		let fileContent = await file.vault.read(file);
 		const container = this.contentEl;
 		container.empty();
-		let mermaidConfiguration: MermaidConfig = isDarkMode()
+		let mermaidConfiguration: MermaidConfig = app.isDarkMode()
 			? { theme: "dark" }
 			: {};
 		mermaid.initialize(mermaidConfiguration);
