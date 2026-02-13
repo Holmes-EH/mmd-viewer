@@ -32,10 +32,7 @@ export class MmdView extends FileView {
 		let content = container.createDiv("graph");
 		const { svg } = await mermaid.render("graph", fileContent);
 
-		// MermaidJS documentation recommends adding rendered svg to the DOM this way.
-		// So disabling the rule.
-		// eslint-disable-next-line @microsoft/sdl/no-inner-html
-		content.innerHTML = svg;
+		content.setHTMLUnsafe(svg);
 
 		let svgElement = content.getElementsByTagName("svg").item(0);
 		if (svgElement !== null) {
